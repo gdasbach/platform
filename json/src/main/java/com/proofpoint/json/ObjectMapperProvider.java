@@ -105,6 +105,9 @@ public class ObjectMapperProvider
         // skip fields that are null instead of writing an explicit json null value
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
+        // Avoid failing to serialize empty/unknown values
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
         // disable auto detection of json properties... all properties must be explicit
         objectMapper.disable(MapperFeature.AUTO_DETECT_CREATORS);
         objectMapper.disable(MapperFeature.AUTO_DETECT_FIELDS);

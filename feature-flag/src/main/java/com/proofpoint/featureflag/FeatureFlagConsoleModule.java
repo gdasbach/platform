@@ -13,19 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.proofpoint.openapi;
+package com.proofpoint.featureflag;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.multibindings.Multibinder;
+import com.proofpoint.featureflag.api.*;
+import com.proofpoint.featureflag.console.FF4jConsoleFilter;
+import com.proofpoint.http.server.TheAdminServlet;
+import org.ff4j.web.api.resources.RuntimeExceptionMapper;
+
+import javax.servlet.Filter;
 
 import static com.proofpoint.jaxrs.JaxrsBinder.jaxrsBinder;
 
-public class OpenApiModule implements Module
+public class FeatureFlagConsoleModule implements Module
 {
     @Override
     public void configure(Binder binder)
     {
-        jaxrsBinder(binder).bindAdmin(OpenApiResource.class);
-        jaxrsBinder(binder).bindAdmin(OpenApiAdminResource.class);
+        Multibinder.newSetBinder(binder, Filter.class, TheAdminServlet.class).addBinding().to(FF4jConsoleFilter.class);
     }
 }

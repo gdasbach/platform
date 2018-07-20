@@ -373,7 +373,7 @@ public class HttpServer
             NodeInfo nodeInfo,
             String... connectorNames)
     {
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
         if (!isAdmin) {
             // Filter out any /admin JAX-RS resources that were implicitly bound.
@@ -394,6 +394,7 @@ public class HttpServer
             SecurityHandler securityHandler = createSecurityHandler(loginService);
             context.setSecurityHandler(securityHandler);
         }
+        System.out.println("Session Handler: " + context.getSessionHandler());
         // -- user provided filters
         for (Filter filter : filters) {
             context.addFilter(new FilterHolder(filter), "/*", null);

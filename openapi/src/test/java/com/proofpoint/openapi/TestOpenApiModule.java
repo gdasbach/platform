@@ -148,6 +148,7 @@ public class TestOpenApiModule
         Object response = client.execute(
                 prepareGet().setUri(uriForOpenSpec("/admin/openapi.json")).build(),
                 createJsonResponseHandler(MAP_CODEC));
+
         assertEquals(response, expected);
     }
 
@@ -161,7 +162,18 @@ public class TestOpenApiModule
         assertEquals(response.getHeader("Content-Type"), "application/yaml");
         assertContains(response.getBody(), "summary: Testing GET request");
         assertContains(response.getBody(), "description: One or more query parameter(s) is null or empty");
+    }
 
+    @Test
+    public void testOpenApiAdminYaml()
+    {
+        StringResponse response = client.execute(
+                prepareGet().setUri(uriForOpenSpec("/admin/openapi-admin.yaml")).build(),
+                createStringResponseHandler());
+        assertEquals(response.getStatusCode(), 200);
+        assertEquals(response.getHeader("Content-Type"), "application/yaml");
+        assertContains(response.getBody(), "/admin/jstack:");
+        assertContains(response.getBody(), "/admin/wadl:");
     }
 
     private URI uriForOpenSpec(String specLocation)

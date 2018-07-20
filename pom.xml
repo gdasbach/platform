@@ -104,6 +104,8 @@
         <module>reporting-client</module>
         <module>reporting-prometheus</module>
         <module>openapi</module>
+        <module>feature-flag</module>
+        <module>cache</module>
     </modules>
 </project>
 

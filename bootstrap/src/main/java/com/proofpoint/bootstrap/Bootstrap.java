@@ -329,6 +329,7 @@ public class Bootstrap
             log.info("Loading configuration");
             builder = builder
                     .withFile(System.getProperty("config"))
+                    .withOptionalFile(System.getProperty("local-config"))
                     .withFile(System.getProperty("secrets-config"))
                     .withSystemProperties();
         }
@@ -357,7 +358,7 @@ public class Bootstrap
         }
 
         // Validate configuration
-        ConfigurationValidator configurationValidator = new ConfigurationValidator(configurationFactory);
+        ConfigurationValidator configurationValidator = new ConfigurationValidator(configurationFactory, requireExplicitBindings);
         List<Message> messages = configurationValidator.validate(modules);
 
         // Log effective configuration
