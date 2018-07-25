@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
 public class ConfigurationValidator
 {
     private final ConfigurationFactory configurationFactory;
-    private final boolean requireExplicitBindings;
+    private final boolean ignoreUnusedProperties;
 
     /**
      * @deprecated Use {@link #ConfigurationValidator(ConfigurationFactory)}.
@@ -52,11 +52,11 @@ public class ConfigurationValidator
         this(configurationFactory, true);
     }
 
-    public ConfigurationValidator(ConfigurationFactory configurationFactory, boolean requireExplicitBindings)
+    public ConfigurationValidator(ConfigurationFactory configurationFactory, boolean ignoreUnusedProperties)
     {
         requireNonNull(configurationFactory, "configurationFactory is null");
         this.configurationFactory = configurationFactory;
-        this.requireExplicitBindings = requireExplicitBindings;
+        this.ignoreUnusedProperties = ignoreUnusedProperties;
     }
 
     public List<Message> validate(Module... modules)
@@ -117,11 +117,11 @@ public class ConfigurationValidator
 
         for (String unusedProperty : configurationFactory.getUnusedProperties()) {
             final Message message = new Message(format("Configuration property '%s' was not used", unusedProperty));
-            if(requireExplicitBindings) {
+            if(ignoreUnusedProperties) {
+                configurationFactory.getMonitor().onWarning(message);
+            } else {
                 messages.add(message);
                 configurationFactory.getMonitor().onError(message);
-            } else {
-                configurationFactory.getMonitor().onWarning(message);
             }
         }
 

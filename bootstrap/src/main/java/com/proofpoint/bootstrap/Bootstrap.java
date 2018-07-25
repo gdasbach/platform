@@ -148,6 +148,7 @@ public class Bootstrap
     private Map<String, String> applicationDefaults = null;
     private boolean quiet = false;
     private boolean requireExplicitBindings = true;
+    private boolean ignoreUnusedProperties = false;
 
     private boolean initialized = false;
 
@@ -288,6 +289,20 @@ public class Bootstrap
     }
 
     /**
+     * Set whether properties in configuration files must be consumed by
+     * configuration.
+     *
+     * @param ignoreUnusedProperties false if properties in configuration
+     * files must be consumed. Default false.
+     * @return the object, for chaining method calls.
+     */
+    public Bootstrap ignoreUnusedProperties(boolean ignoreUnusedProperties)
+    {
+        this.ignoreUnusedProperties = ignoreUnusedProperties;
+        return this;
+    }
+
+    /**
      * Initialize the application and start its lifecycle.
      *
      * @return the application's Guice injector
@@ -358,7 +373,7 @@ public class Bootstrap
 
         // Validate configuration
         // If explicit bindings are not required, unused properties will not trigger errors
-        ConfigurationValidator configurationValidator = new ConfigurationValidator(configurationFactory, requireExplicitBindings);
+        ConfigurationValidator configurationValidator = new ConfigurationValidator(configurationFactory, ignoreUnusedProperties);
         List<Message> messages = configurationValidator.validate(modules);
 
         // Log effective configuration

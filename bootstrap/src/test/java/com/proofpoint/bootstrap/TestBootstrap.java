@@ -232,7 +232,7 @@ public class TestBootstrap
                 .doNotInitializeLogging()
                 .withModules((Module) binder -> bindConfig(binder).to(SimpleConfig.class))
                 .quiet()
-                .requireExplicitBindings(false)
+                .ignoreUnusedProperties(true)
                 .initialize();
     }
 
